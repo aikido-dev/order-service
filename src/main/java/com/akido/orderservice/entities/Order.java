@@ -30,4 +30,6 @@ public class Order {
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    public static void main(String[] args) {
+    }
 }

@@ -4,9 +4,12 @@ import com.akido.orderservice.dto.UserInfoDTO;
 import com.akido.orderservice.entities.User;
 import com.akido.orderservice.repositories.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -28,5 +31,10 @@ public class UserService {
                     user.getRole()));
         }
         return result;
+    }
+
+
+    public void deleteUserById(UUID userId) {
+        userRepository.deleteById(userId);
     }
 }

@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     PasswordEncoder passwordEncoder;
     UserRepository userRepository;
+    JWTService jwtService;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder encoder) {
+    public AuthService(UserRepository userRepository, PasswordEncoder encoder, JWTService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = encoder;
+        this.jwtService = jwtService;
     }
 
     public void registerUser(String username, String password) {
@@ -22,5 +24,15 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(password));
 
         userRepository.save(user);
+    }
+
+    public String loginUser(String username, String password) {
+       User user = userRepository.findByUsername(username);
+
+       if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+           return jwtService.getJWT(user);
+       }
+
+       return null;
     }
 }

@@ -8,18 +8,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    PasswordEncoder passwordEncoder;
     UserRepository userRepository;
 
-    public AuthService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository, PasswordEncoder encoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = encoder;
     }
 
     public void registerUser(String username, String password) {
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
-        
+
         userRepository.save(user);
     }
 }

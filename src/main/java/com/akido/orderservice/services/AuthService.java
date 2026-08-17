@@ -1,9 +1,12 @@
 package com.akido.orderservice.services;
 
+import com.akido.orderservice.dto.CurrentUserDTO;
 import com.akido.orderservice.entities.User;
+import com.akido.orderservice.enums.Role;
 import com.akido.orderservice.repositories.UserRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,9 +33,16 @@ public class AuthService {
        User user = userRepository.findByUsername(username);
 
        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-           return jwtService.getJWT(user);
+           return jwtService.createJWT(user);
        }
 
        return null;
+    }
+
+    public CurrentUserDTO getCurrentUserInfo(Jwt jwt) {
+        String role = jwt.getClaimAsString("role");
+        String username = jwt.getSubject();
+
+        return new CurrentUserDTO(username, Role.valueOf(role));
     }
 }

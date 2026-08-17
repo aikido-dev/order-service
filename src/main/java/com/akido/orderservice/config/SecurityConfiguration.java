@@ -40,7 +40,8 @@ public class SecurityConfiguration{
                         ).permitAll()
                         .requestMatchers(
                                 "/api/users",
-                                "/api/users/**"
+                                "/api/users/**",
+                                "/api/orders/all"
                         ).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );

@@ -23,7 +23,6 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 public class SecurityConfiguration{
 
-
     private final SecretKey secretKey;
 
     public SecurityConfiguration(@Value("${jwt.secret}") String secret) {
@@ -57,14 +56,14 @@ public class SecurityConfiguration{
     }
 
     @Bean
-    public JwtEncoder getJwtEncoder() {
+    public JwtEncoder jwtEncoder() {
         return NimbusJwtEncoder
                 .withSecretKey(secretKey)
                 .build();
     }
 
     @Bean
-    public JwtDecoder getJwtDecoder() {
+    public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder
                 .withSecretKey(secretKey)
                 .build();

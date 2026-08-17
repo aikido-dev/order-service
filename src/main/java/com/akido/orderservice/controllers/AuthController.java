@@ -9,7 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 
 @RestController
 public class AuthController {
@@ -40,8 +45,7 @@ public class AuthController {
 
     @GetMapping("/api/auth/me")
     public ResponseEntity<CurrentUserDTO> currentUserInfo(
-            @AuthenticationPrincipal Jwt jwt
-    ){
+            @AuthenticationPrincipal Jwt jwt){
         return ResponseEntity.ok(authService.getCurrentUserInfo(jwt));
     }
 }

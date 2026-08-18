@@ -2,6 +2,8 @@ package com.akido.orderservice.controllers;
 
 import com.akido.orderservice.dto.OrderDTO;
 import com.akido.orderservice.services.OrderService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +18,15 @@ public class OrderController {
     }
 
     @GetMapping("/api/orders/all")
-    public List<OrderDTO> ordersAll(){
+    public List<OrderDTO> getAllOrders() {
         return orderService.getAllOrders();
     }
+
+    @GetMapping("/api/orders")
+    public List<OrderDTO> getUserOrders(
+            @AuthenticationPrincipal Jwt jwt){
+        return orderService.getUserOrders(jwt.getSubject());
+    }
+
+
 }

@@ -1,6 +1,6 @@
 package com.akido.orderservice.services;
 
-import com.akido.orderservice.entities.User;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -17,12 +17,20 @@ public class JWTService {
         this.jwtEncoder = jwtEncoder;
     }
 
-    public String createJWT(User user){
+    public String createJWT(Authentication authentication) {
+        String username = authentication.getName();
+        String role = authentication.getAuthorities()
+                .iterator()
+                .next()
+                .getAuthority();
+
+
+        Instant now = Instant.now();
         JwtClaimsSet claimsSet = JwtClaimsSet.builder()
-                .subject(user.getUsername())
-                .issuedAt(Instant.now())
-                .expiresAt(Instant.now().plus(1, ChronoUnit.DAYS))
-                .claim("role", user.getRole().name())
+                .subject(username)
+                .issuedAt(now)
+                .expiresAt(now.plus(1, ChronoUnit.DAYS))
+                .claim("role", role.substring("ROLE_".length()))
                 .build();
 
         JwtEncoderParameters params = JwtEncoderParameters.from(claimsSet);

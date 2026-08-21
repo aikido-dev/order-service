@@ -5,6 +5,9 @@ import com.akido.orderservice.entities.User;
 import com.akido.orderservice.enums.Role;
 import com.akido.orderservice.repositories.UserRepository;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -14,11 +17,13 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JWTService jwtService;
+    private final AuthenticationManager authenticationManager;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder encoder, JWTService jwtService) {
+    public AuthService(UserRepository userRepository, PasswordEncoder encoder, JWTService jwtService, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = encoder;
         this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
     }
 
     public void registerUser(String username, String password) {
@@ -30,13 +35,10 @@ public class AuthService {
     }
 
     public String loginUser(String username, String password) {
-       User user = userRepository.findByUsername(username);
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
-       if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-           return jwtService.createJWT(user);
-       }
-
-       return null;
+        return jwtService.createJWT(authentication);
     }
 
     public CurrentUserDTO getCurrentUserInfo(Jwt jwt) {

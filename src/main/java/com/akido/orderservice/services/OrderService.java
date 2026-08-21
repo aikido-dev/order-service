@@ -37,7 +37,7 @@ public class OrderService {
     }
 
     public List<OrderDTO> getUserOrders(String username) {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).orElse(null);
 
         List<Order> all = orderRepository.findAllByUserId(user.getId());
 

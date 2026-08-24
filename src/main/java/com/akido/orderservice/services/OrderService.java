@@ -1,7 +1,8 @@
 package com.akido.orderservice.services;
 
 import com.akido.orderservice.dto.UpdateOrderStatusDTO;
-import com.akido.orderservice.enums.Status;
+import com.akido.orderservice.enums.Role;
+import com.akido.orderservice.exceptions.NoPermissionException;
 import com.akido.orderservice.exceptions.OrderNotFoundException;
 import com.akido.orderservice.exceptions.UserNotFoundException;
 import com.akido.orderservice.dto.OrderDTO;
@@ -9,7 +10,6 @@ import com.akido.orderservice.entities.Order;
 import com.akido.orderservice.entities.User;
 import com.akido.orderservice.repositories.OrderRepository;
 import com.akido.orderservice.repositories.UserRepository;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public class OrderService {
             orderRepository.save(order);
         }
         else {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException(username);
         }
 
     }
@@ -77,7 +77,20 @@ public class OrderService {
             order.setStatus(orderStatus.status());
             orderRepository.save(order);
         }else {
-            throw new OrderNotFoundException("Order with id: " + orderId + " does not exist.");
+            throw new OrderNotFoundException(orderId);
         }
+    }
+
+    public void deleteOrder(UUID orderId, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
+
+        boolean isOwner = user.getId().equals(order.getUser().getId());
+
+        if (user.getRole() != Role.ADMIN || !isOwner){
+            throw new NoPermissionException("User " + username + " has no permission for this action");
+        }
+
+        orderRepository.delete(order);
     }
 }

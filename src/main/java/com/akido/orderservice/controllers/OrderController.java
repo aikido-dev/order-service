@@ -42,11 +42,18 @@ public class OrderController {
     }
 
     @PutMapping("/api/orders/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public void updateOrderStatus(
             @PathVariable(name = "id") UUID orderId,
             @RequestBody @Valid UpdateOrderStatusDTO orderStatus){
         orderService.updateOrderStatus(orderId, orderStatus);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/api/orders/{id}")
+    public void deleteOrder(@PathVariable(name="id") UUID orderId,
+                            @AuthenticationPrincipal Jwt jwt){
+        orderService.deleteOrder(orderId, jwt.getSubject());
+
     }
 
 

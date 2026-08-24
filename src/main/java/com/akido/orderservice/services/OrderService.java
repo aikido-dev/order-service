@@ -1,11 +1,11 @@
 package com.akido.orderservice.services;
 
+import com.akido.orderservice.exceptions.UserNotFoundException;
 import com.akido.orderservice.dto.OrderDTO;
 import com.akido.orderservice.entities.Order;
 import com.akido.orderservice.entities.User;
 import com.akido.orderservice.repositories.OrderRepository;
 import com.akido.orderservice.repositories.UserRepository;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -48,5 +48,21 @@ public class OrderService {
                         order.getDescription(),
                         order.getStatus(),
                         order.getCreatedAt())).toList();
+    }
+
+    public void createOrder(String username, String description){
+        User user = userRepository.findByUsername(username).orElse(null);
+
+        if (user != null){
+            Order order = new Order();
+
+            order.setDescription(description);
+            order.setUser(user);
+            orderRepository.save(order);
+        }
+        else {
+            throw new UserNotFoundException();
+        }
+
     }
 }

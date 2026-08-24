@@ -1,11 +1,13 @@
 package com.akido.orderservice.controllers;
 
+import com.akido.orderservice.dto.CreateOrderRequestDTO;
 import com.akido.orderservice.dto.OrderDTO;
 import com.akido.orderservice.services.OrderService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,6 +28,15 @@ public class OrderController {
     public List<OrderDTO> getUserOrders(
             @AuthenticationPrincipal Jwt jwt){
         return orderService.getUserOrders(jwt.getSubject());
+    }
+
+    @PostMapping("/api/orders")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createOrder(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestBody @Valid CreateOrderRequestDTO description){
+
+        orderService.createOrder(jwt.getSubject(), description.description());
     }
 
 

@@ -58,6 +58,8 @@ public class SecurityConfiguration{
                                 "/api/users/**",
                                 "/api/orders/all"
                         ).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/orders/**")
+                        .hasRole("ADMIN")
                         .anyRequest().authenticated()
 
                 );

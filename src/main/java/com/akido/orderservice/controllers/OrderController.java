@@ -2,6 +2,7 @@ package com.akido.orderservice.controllers;
 
 import com.akido.orderservice.dto.CreateOrderRequestDTO;
 import com.akido.orderservice.dto.OrderDTO;
+import com.akido.orderservice.dto.UpdateOrderStatusDTO;
 import com.akido.orderservice.services.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class OrderController {
@@ -37,6 +39,14 @@ public class OrderController {
             @RequestBody @Valid CreateOrderRequestDTO description){
 
         orderService.createOrder(jwt.getSubject(), description.description());
+    }
+
+    @PutMapping("/api/orders/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateOrderStatus(
+            @PathVariable(name = "id") UUID orderId,
+            @RequestBody @Valid UpdateOrderStatusDTO orderStatus){
+        orderService.updateOrderStatus(orderId, orderStatus);
     }
 
 

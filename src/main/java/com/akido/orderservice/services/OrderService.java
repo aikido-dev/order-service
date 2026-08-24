@@ -1,15 +1,20 @@
 package com.akido.orderservice.services;
 
+import com.akido.orderservice.dto.UpdateOrderStatusDTO;
+import com.akido.orderservice.enums.Status;
+import com.akido.orderservice.exceptions.OrderNotFoundException;
 import com.akido.orderservice.exceptions.UserNotFoundException;
 import com.akido.orderservice.dto.OrderDTO;
 import com.akido.orderservice.entities.Order;
 import com.akido.orderservice.entities.User;
 import com.akido.orderservice.repositories.OrderRepository;
 import com.akido.orderservice.repositories.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class OrderService {
@@ -64,5 +69,15 @@ public class OrderService {
             throw new UserNotFoundException();
         }
 
+    }
+
+    public void updateOrderStatus(UUID orderId, UpdateOrderStatusDTO orderStatus) {
+        Order order = orderRepository.findById(orderId).orElse(null);
+        if (order != null){
+            order.setStatus(orderStatus.status());
+            orderRepository.save(order);
+        }else {
+            throw new OrderNotFoundException("Order with id: " + orderId + " does not exist.");
+        }
     }
 }

@@ -1,8 +1,8 @@
 package com.akido.orderservice.controllers;
 
 import com.akido.orderservice.dto.CreateOrderRequestDTO;
-import com.akido.orderservice.dto.OrderDTO;
-import com.akido.orderservice.dto.UpdateOrderStatusDTO;
+import com.akido.orderservice.dto.OrderResponseDTO;
+import com.akido.orderservice.dto.UpdateOrderStatusRequestDTO;
 import com.akido.orderservice.services.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,12 +22,12 @@ public class OrderController {
     }
 
     @GetMapping("/api/orders/all")
-    public List<OrderDTO> getAllOrders() {
+    public List<OrderResponseDTO> getAllOrders() {
         return orderService.getAllOrders();
     }
 
     @GetMapping("/api/orders")
-    public List<OrderDTO> getUserOrders(
+    public List<OrderResponseDTO> getUserOrders(
             @AuthenticationPrincipal Jwt jwt){
         return orderService.getUserOrders(jwt.getSubject());
     }
@@ -44,7 +44,7 @@ public class OrderController {
     @PutMapping("/api/orders/{id}")
     public void updateOrderStatus(
             @PathVariable(name = "id") UUID orderId,
-            @RequestBody @Valid UpdateOrderStatusDTO orderStatus){
+            @RequestBody @Valid UpdateOrderStatusRequestDTO orderStatus){
         orderService.updateOrderStatus(orderId, orderStatus);
     }
 

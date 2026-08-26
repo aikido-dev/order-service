@@ -1,6 +1,6 @@
 package com.akido.orderservice.controllers;
 
-import com.akido.orderservice.dto.UserInfoDTO;
+import com.akido.orderservice.dto.UserResponseDTO;
 import com.akido.orderservice.services.UserService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +19,7 @@ public class UserController {
     }
 
     @GetMapping("/api/users")
-    public List<UserInfoDTO> getAllUsers() {
+    public List<UserResponseDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 

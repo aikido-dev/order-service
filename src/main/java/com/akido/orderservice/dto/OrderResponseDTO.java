@@ -5,7 +5,7 @@ import com.akido.orderservice.enums.Status;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record OrderDTO(
+public record OrderResponseDTO(
         UUID id,
         UUID userId,
         String description,

@@ -1,6 +1,6 @@
 package com.akido.orderservice.services;
 
-import com.akido.orderservice.dto.CurrentUserDTO;
+import com.akido.orderservice.dto.CurrentUserResponseDTO;
 import com.akido.orderservice.entities.User;
 import com.akido.orderservice.enums.Role;
 import com.akido.orderservice.repositories.UserRepository;
@@ -41,10 +41,10 @@ public class AuthService {
         return jwtService.createJWT(authentication);
     }
 
-    public CurrentUserDTO getCurrentUserInfo(Jwt jwt) {
+    public CurrentUserResponseDTO getCurrentUserInfo(Jwt jwt) {
         String role = jwt.getClaimAsString("role");
         String username = jwt.getSubject();
 
-        return new CurrentUserDTO(username, Role.valueOf(role));
+        return new CurrentUserResponseDTO(username, Role.valueOf(role));
     }
 }

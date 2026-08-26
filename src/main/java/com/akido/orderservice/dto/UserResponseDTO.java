@@ -2,7 +2,10 @@ package com.akido.orderservice.dto;
 
 import com.akido.orderservice.enums.Role;
 
-public record CurrentUserDTO(
+import java.util.UUID;
+
+public record UserResponseDTO(
+        UUID id,
         String username,
         Role role
 ) {

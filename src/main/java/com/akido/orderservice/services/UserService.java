@@ -1,6 +1,6 @@
 package com.akido.orderservice.services;
 
-import com.akido.orderservice.dto.UserInfoDTO;
+import com.akido.orderservice.dto.UserResponseDTO;
 import com.akido.orderservice.entities.User;
 import com.akido.orderservice.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -18,12 +18,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<UserInfoDTO> getAllUsers() {
+    public List<UserResponseDTO> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
-        List<UserInfoDTO> result = new ArrayList<>();
+        List<UserResponseDTO> result = new ArrayList<>();
 
         for (User user : allUsers) {
-            result.add(new UserInfoDTO(
+            result.add(new UserResponseDTO(
                     user.getId(),
                     user.getUsername(),
                     user.getRole()));

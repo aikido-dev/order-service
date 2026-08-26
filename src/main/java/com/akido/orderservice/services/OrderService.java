@@ -1,11 +1,11 @@
 package com.akido.orderservice.services;
 
-import com.akido.orderservice.dto.UpdateOrderStatusDTO;
+import com.akido.orderservice.dto.UpdateOrderStatusRequestDTO;
 import com.akido.orderservice.enums.Role;
 import com.akido.orderservice.exceptions.NoPermissionException;
 import com.akido.orderservice.exceptions.OrderNotFoundException;
 import com.akido.orderservice.exceptions.UserNotFoundException;
-import com.akido.orderservice.dto.OrderDTO;
+import com.akido.orderservice.dto.OrderResponseDTO;
 import com.akido.orderservice.entities.Order;
 import com.akido.orderservice.entities.User;
 import com.akido.orderservice.repositories.OrderRepository;
@@ -26,12 +26,12 @@ public class OrderService {
         this.userRepository = userRepository;
     }
 
-    public List<OrderDTO> getAllOrders(){
+    public List<OrderResponseDTO> getAllOrders(){
         List<Order> all = orderRepository.findAll();
-        List<OrderDTO> orderDTOs = new ArrayList<>();
+        List<OrderResponseDTO> orderDTOs = new ArrayList<>();
 
         for (Order order : all) {
-            orderDTOs.add(new OrderDTO(
+            orderDTOs.add(new OrderResponseDTO(
                     order.getId(),
                     order.getUser().getId(),
                     order.getDescription(),
@@ -41,13 +41,13 @@ public class OrderService {
         return orderDTOs;
     }
 
-    public List<OrderDTO> getUserOrders(String username) {
+    public List<OrderResponseDTO> getUserOrders(String username) {
         User user = userRepository.findByUsername(username).orElse(null);
 
         List<Order> all = orderRepository.findAllByUserId(user.getId());
 
         return all.stream()
-                .map(order -> new OrderDTO(
+                .map(order -> new OrderResponseDTO(
                         order.getId(),
                         order.getUser().getId(),
                         order.getDescription(),
@@ -71,7 +71,7 @@ public class OrderService {
 
     }
 
-    public void updateOrderStatus(UUID orderId, UpdateOrderStatusDTO orderStatus) {
+    public void updateOrderStatus(UUID orderId, UpdateOrderStatusRequestDTO orderStatus) {
         Order order = orderRepository.findById(orderId).orElse(null);
         if (order != null){
             order.setStatus(orderStatus.status());

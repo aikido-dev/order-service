@@ -1,10 +1,11 @@
 package com.akido.orderservice.controllers;
 
-import com.akido.orderservice.dto.CurrentUserDTO;
+import com.akido.orderservice.dto.CurrentUserResponseDTO;
 import com.akido.orderservice.dto.LoginRequestDTO;
 import com.akido.orderservice.dto.LoginResponseDTO;
 import com.akido.orderservice.dto.RegisterRequestDTO;
 import com.akido.orderservice.services.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,13 +27,13 @@ public class AuthController {
 
     @PostMapping("/api/auth/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerUser(@RequestBody RegisterRequestDTO registerDTO) {
+    public void registerUser(@RequestBody @Valid RegisterRequestDTO registerDTO) {
         authService.registerUser(registerDTO.username(), registerDTO.password());
     }
 
     @PostMapping("/api/auth/login")
     public ResponseEntity<LoginResponseDTO> loginUser(
-            @RequestBody LoginRequestDTO loginDTO){
+            @RequestBody @Valid LoginRequestDTO loginDTO){
         String token = authService.loginUser(loginDTO.username(), loginDTO.password());
 
         if (token != null) {
@@ -44,7 +45,7 @@ public class AuthController {
     }
 
     @GetMapping("/api/auth/me")
-    public ResponseEntity<CurrentUserDTO> currentUserInfo(
+    public ResponseEntity<CurrentUserResponseDTO> currentUserInfo(
             @AuthenticationPrincipal Jwt jwt){
         return ResponseEntity.ok(authService.getCurrentUserInfo(jwt));
     }

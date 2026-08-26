@@ -5,6 +5,8 @@ import com.akido.orderservice.dto.OrderResponseDTO;
 import com.akido.orderservice.dto.UpdateOrderStatusRequestDTO;
 import com.akido.orderservice.services.OrderService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -22,14 +24,15 @@ public class OrderController {
     }
 
     @GetMapping("/api/orders/all")
-    public List<OrderResponseDTO> getAllOrders() {
-        return orderService.getAllOrders();
+    public Page<OrderResponseDTO> getAllOrders(Pageable pageable) {
+        return orderService.getAllOrders(pageable);
     }
 
     @GetMapping("/api/orders")
-    public List<OrderResponseDTO> getUserOrders(
-            @AuthenticationPrincipal Jwt jwt){
-        return orderService.getUserOrders(jwt.getSubject());
+    public Page<OrderResponseDTO> getUserOrders(
+            @AuthenticationPrincipal Jwt jwt,
+            Pageable pageable){
+        return orderService.getUserOrders(jwt.getSubject(), pageable);
     }
 
     @PostMapping("/api/orders")

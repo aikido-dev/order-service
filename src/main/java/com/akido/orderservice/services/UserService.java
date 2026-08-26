@@ -1,11 +1,10 @@
 package com.akido.orderservice.services;
 
 import com.akido.orderservice.dto.UserResponseDTO;
-import com.akido.orderservice.entities.User;
+import com.akido.orderservice.mappers.UserMapper;
 import com.akido.orderservice.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,22 +12,19 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     public List<UserResponseDTO> getAllUsers() {
-        List<User> allUsers = userRepository.findAll();
-        List<UserResponseDTO> result = new ArrayList<>();
+        return userRepository.findAll()
+                .stream()
+                .map(userMapper::toDTO)
+                .toList();
 
-        for (User user : allUsers) {
-            result.add(new UserResponseDTO(
-                    user.getId(),
-                    user.getUsername(),
-                    user.getRole()));
-        }
-        return result;
     }
 
     public void deleteUserById(UUID userId) {

@@ -32,7 +32,6 @@ public class OrderService {
     }
 
     public Page<OrderResponseDTO> getAllOrders(Pageable pageable){
-
         return  orderRepository.findAll(getSortedPageable(pageable))
                 .map(orderMapper::toDTO);
     }
@@ -50,15 +49,15 @@ public class OrderService {
                 .orElseThrow(() -> new UserNotFoundException(username));
 
         Order order = new Order();
-
         order.setDescription(description);
         order.setUser(user);
+
         orderRepository.save(order);
     }
 
     public void updateOrderStatus(UUID orderId, UpdateOrderStatusRequestDTO orderStatus) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(()->new OrderNotFoundException(orderId));
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
 
         order.setStatus(orderStatus.status());
         orderRepository.save(order);

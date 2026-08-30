@@ -7,6 +7,7 @@ import com.akido.orderservice.dto.RegisterRequestDTO;
 import com.akido.orderservice.services.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -85,7 +86,8 @@ public class AuthController {
     @Operation(
             summary = "Получить информацию о текущем пользователе.",
             description = "Возвращает имя и роль текущего пользователя. " +
-                    "Доступен только аутентифицированным пользователям."
+                    "Доступен только аутентифицированным пользователям.",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponse(
             responseCode = "401",

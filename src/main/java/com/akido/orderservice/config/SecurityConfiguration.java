@@ -2,6 +2,8 @@ package com.akido.orderservice.config;
 
 import com.akido.orderservice.entities.User;
 import com.akido.orderservice.repositories.UserRepository;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.servlet.DispatcherType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +36,12 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.Collections;
 import java.util.Set;
 
+@SecurityScheme(
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT"
+)
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration{

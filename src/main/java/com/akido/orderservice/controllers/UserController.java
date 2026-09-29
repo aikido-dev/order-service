@@ -1,10 +1,9 @@
 package com.akido.orderservice.controllers;
 
+import com.akido.orderservice.api.UserApi;
 import com.akido.orderservice.dto.UserResponseDTO;
 import com.akido.orderservice.services.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,54 +14,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.List;
 import java.util.UUID;
 
-@SecurityRequirement(name = "bearerAuth")
+@RequiredArgsConstructor
 @RestController
-public class UserController {
+public class UserController implements UserApi {
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Operation(
-            summary = "Получить всех пользователей.",
-            description = "Возвращает список всех пользователей. " +
-                    "Доступен только администраторам."
-    )
-    @ApiResponse(
-            responseCode = "401",
-            description = "Аутентификация не пройдена."
-    )
-    @ApiResponse(
-            responseCode = "403",
-            description = "Недостаточно прав для этой операции."
-    )
+    @Override
     @GetMapping("/api/users")
     public List<UserResponseDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @Operation(
-            summary = "Удалить пользователя.",
-            description = "Удаляет пользователя по id. " +
-                    "Доступен только администраторам."
-    )
-    @ApiResponse(
-            responseCode = "204",
-            description = "Пользователь успешно удален."
-    )
-    @ApiResponse(
-            responseCode = "401",
-            description = "Аутентификация не пройдена."
-    )
-    @ApiResponse(
-            responseCode = "403",
-            description = "Недостаточно прав для этой операции."
-    )
-    @ApiResponse(
-            responseCode = "400",
-            description = "Идентификатор пользователя не прошел валидацию."
-    )
+    @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/api/users/{id}")
     public void deleteUserById(@PathVariable UUID id) {

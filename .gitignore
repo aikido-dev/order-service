@@ -79,3 +79,7 @@ application-local.properties
 ### OS / IDE generated files ###
 Thumbs.db
 Desktop.ini
+
+###Postman
+.postman/
+postman/

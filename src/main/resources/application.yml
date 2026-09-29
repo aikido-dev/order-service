@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: orderservice
+  datasource:
+    url: jdbc:postgresql://localhost:5432/order_service
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  data:
+    web:
+      pageable:
+        default-page-size: 20
+        max-page-size: 100
+jwt:
+  secret: ${JWT_SECRET}

@@ -11,6 +11,7 @@ import com.akido.orderservice.entities.User;
 import com.akido.orderservice.mappers.OrderMapper;
 import com.akido.orderservice.repositories.OrderRepository;
 import com.akido.orderservice.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,16 +21,11 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final OrderMapper orderMapper;
-
-    public OrderService(OrderRepository orderRepository, UserRepository userRepository, OrderMapper orderMapper) {
-        this.orderRepository = orderRepository;
-        this.userRepository = userRepository;
-        this.orderMapper = orderMapper;
-    }
 
     public Page<OrderResponseDTO> getAllOrders(Pageable pageable){
         return  orderRepository.findAll(getSortedPageable(pageable))

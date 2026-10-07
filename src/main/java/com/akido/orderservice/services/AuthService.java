@@ -6,6 +6,7 @@ import com.akido.orderservice.enums.Role;
 import com.akido.orderservice.exceptions.UserAlreadyExistsException;
 import com.akido.orderservice.repositories.UserRepository;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,18 +15,12 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
-
-    public AuthService(UserRepository userRepository, PasswordEncoder encoder, JWTService jwtService, AuthenticationManager authenticationManager) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = encoder;
-        this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
-    }
 
     public void registerUser(String username, String password) {
         if(userRepository.existsByUsername(username)){

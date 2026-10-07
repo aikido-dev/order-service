@@ -1,5 +1,6 @@
 package com.akido.orderservice.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -10,12 +11,9 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 @Service
+@RequiredArgsConstructor
 public class JWTService {
     private final JwtEncoder jwtEncoder;
-
-    public JWTService(JwtEncoder jwtEncoder) {
-        this.jwtEncoder = jwtEncoder;
-    }
 
     public String createJWT(Authentication authentication) {
         String username = authentication.getName();

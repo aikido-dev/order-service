@@ -21,7 +21,6 @@ public class UserService {
                 .stream()
                 .map(userMapper::toDTO)
                 .toList();
-
     }
 
     public void deleteUserById(UUID userId) {
